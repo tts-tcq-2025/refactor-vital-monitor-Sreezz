@@ -14,6 +14,20 @@ enum VitalStatus
     Spo2Low
 };
 
+typedef struct 
+{
+    enum VitalStatus  status;
+    const char* alertMessage;
+} VitalInfo;
+
+// Mapping table
+const VitalInfo vitalInfoTable[] = 
+{
+    {TemperatureCritical, "Temperature is critical!\n"},
+    {PulseOutOfRange, "Pulse Rate is out of range!\n"},
+    {Spo2Low, "Oxygen Saturation out of range!\n"}
+};
+
 
 bool isTemperatureCritical(float temperature) 
 {
@@ -49,27 +63,20 @@ enum VitalStatus evaluateVitals(float temperature, float pulseRate, float spo2)
 
 void showAlert(enum VitalStatus status) 
 {
-      switch (status) 
+    for (int i = 0; i < sizeof(vitalInfoTable) / sizeof(vitalInfoTable[0]); i++) 
     {
-        case TemperatureCritical:
-            cout << "Temperature is critical!\n";
+        if (vitalInfoTable[i].status == status) 
+        {
+            printf("Message: %s", vitalInfoTable[i].alertMessage);
+            for (int i = 0; i < 6; i++) 
+            {
+                cout << "\r* " << flush;
+                sleep_for(seconds(1));
+                cout << "\r *" << flush;
+                sleep_for(seconds(1));
+            }
             break;
-        case PulseOutOfRange:
-            cout << "Pulse Rate is out of range!\n";
-            break;
-        case Spo2Low:
-            cout << "Oxygen Saturation out of range!\n";
-            break;
-        default:
-            //
-            break;
-    }
-    for (int i = 0; i < 6; i++) 
-    {
-        cout << "\r* " << flush;
-        sleep_for(seconds(1));
-        cout << "\r *" << flush;
-        sleep_for(seconds(1));
+        }     
     }
 }
 
