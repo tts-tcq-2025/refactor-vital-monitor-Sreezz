@@ -6,27 +6,31 @@
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
 
-enum VitalStatus 
+enum Vital
 {
-    OK,
-    TemperatureCritical,
-    PulseOutOfRange,
-    Spo2Low
+    VitalTemperature,
+    VitalPulse,
+    VitalSpo2,
+    VitalCount
 };
+
 
 typedef struct 
 {
-    enum VitalStatus  status;
+    enum Vital  status;
     const char* alertMessage;
 } VitalInfo;
 
 // Mapping table
-const VitalInfo vitalInfoTable[] = 
+const VitalInfo vitalInfoTable[VitalCount] = 
 {
-    {TemperatureCritical, "Temperature is critical!\n"},
-    {PulseOutOfRange, "Pulse Rate is out of range!\n"},
-    {Spo2Low, "Oxygen Saturation out of range!\n"}
+    {VitalTemperature, "Temperature is critical!\n"},
+    {VitalPulse, "Pulse Rate is out of range!\n"},
+    {VitalSpo2, "Oxygen Saturation out of range!\n"}
 };
+
+
+typedef bool (*VitalCheckFunction)(float);
 
 
 bool isTemperatureCritical(float temperature) 
@@ -44,56 +48,42 @@ bool isSpo2Low(float spo2)
     return (spo2 < 90);
 }
 
-enum VitalStatus evaluateVitals(float temperature, float pulseRate, float spo2) 
-{
-    if (isTemperatureCritical(temperature)) 
-    {
-        return TemperatureCritical;
-    }
-    if (isPulseOutOfRange(pulseRate)) 
-    {
-        return PulseOutOfRange;
-    }
-    if (isSpo2Low(spo2)) 
-    {
-        return Spo2Low;
-    }
-    return OK;
-}
 
-void showAlert(enum VitalStatus status) 
+// Function pointer array
+VitalCheckFunction vitalChecks[] = {
+    isTemperatureCritical,
+    isPulseOutOfRange,
+    isSpo2Low
+};
+
+
+void showAlert(int CurrVital) 
 {
-    for (int i = 0; i < sizeof(vitalInfoTable) / sizeof(vitalInfoTable[0]); i++) 
+
+    printf("Message: %s", vitalInfoTable[CurrVital].alertMessage);
+    for (int i = 0; i < 6; i++) 
     {
-        if (vitalInfoTable[i].status == status) 
-        {
-            printf("Message: %s", vitalInfoTable[i].alertMessage);
-            for (int i = 0; i < 6; i++) 
-            {
-                cout << "\r* " << flush;
-                sleep_for(seconds(1));
-                cout << "\r *" << flush;
-                sleep_for(seconds(1));
-            }
-            break;
-        }     
+        cout << "\r* " << flush;
+        sleep_for(seconds(1));
+        cout << "\r *" << flush;
+        sleep_for(seconds(1));
     }
 }
 
 
 int vitalsOk(float temperature, float pulseRate, float spo2) 
 {
-    enum VitalStatus status = evaluateVitals(temperature, pulseRate, spo2);
-    showAlert(status);
 
-    if(status == OK)
+    float values[] = {temperature, pulseRate, spo2};
+    bool allOk = true;
+    
+    for (int i = VitalTemperature; i < VitalCount; i++) 
     {
-      return 1;
+        if (vitalChecks[i](values[i])) 
+        {
+            showAlert(i);
+            allOk = false;
+        }
     }
-    else
-    {
-      return 0;
-    }
-  
+    return allOk ? 1 : 0;
 }
-
