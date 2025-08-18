@@ -63,7 +63,6 @@ int vitalsOk(float temperature, float pulseRate, float spo2) {
     bool allOk = true;
     for (int i = VitalTemperature; i < VitalCount; i++) {
         allOk &= !vitalChecks[i](values[i]) || (showAlert(i), false);
-        }
     }
     return allOk ? 1 : 0;
 }
