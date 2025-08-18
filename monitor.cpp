@@ -3,10 +3,10 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
-
-enum Vital
+enum Vital 
 {
     VitalTemperature,
     VitalPulse,
@@ -14,10 +14,9 @@ enum Vital
     VitalCount
 };
 
-
 typedef struct 
 {
-    enum Vital  status;
+    enum Vital status;
     const char* alertMessage;
 } VitalInfo;
 
@@ -29,9 +28,7 @@ const VitalInfo vitalInfoTable[VitalCount] =
     {VitalSpo2, "Oxygen Saturation out of range!\n"}
 };
 
-
 typedef bool (*VitalCheckFunction)(float);
-
 
 bool isTemperatureCritical(float temperature) 
 {
@@ -48,18 +45,16 @@ bool isSpo2Low(float spo2)
     return (spo2 < 90);
 }
 
-
 // Function pointer array
-VitalCheckFunction vitalChecks[] = {
+VitalCheckFunction vitalChecks[] = 
+{
     isTemperatureCritical,
     isPulseOutOfRange,
     isSpo2Low
 };
 
-
 void showAlert(int CurrVital) 
 {
-
     printf("Message: %s", vitalInfoTable[CurrVital].alertMessage);
     for (int i = 0; i < 6; i++) 
     {
@@ -73,7 +68,6 @@ void showAlert(int CurrVital)
 
 int vitalsOk(float temperature, float pulseRate, float spo2) 
 {
-
     float values[] = {temperature, pulseRate, spo2};
     bool allOk = true;
     
