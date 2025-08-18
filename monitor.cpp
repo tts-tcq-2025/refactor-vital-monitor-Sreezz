@@ -14,16 +14,33 @@ enum Vital {
     VitalCount
 };
 
+enum Language {
+    LANG_ENGLISH,
+    LANG_GERMAN,
+    LANG_COUNT
+};
+
+Language currentLanguage = LANG_GERMAN;  // Default language
+
 typedef struct {
     enum Vital status;
-    const char* alertMessage;
+    const char* alertMessages[LANG_COUNT];
 } VitalInfo;
 
 // Mapping table
 const VitalInfo vitalInfoTable[VitalCount] = {
-    {VitalTemperature, "Temperature is critical!\n"},
-    {VitalPulse, "Pulse Rate is out of range!\n"},
-    {VitalSpo2, "Oxygen Saturation out of range!\n"}
+    {VitalTemperature, {
+        "Temperature is critical!\n",
+        "Temperatur ist kritisch!\n"
+    }},
+    {VitalPulse, {
+        "Pulse Rate is out of range!\n",
+        "Puls ist außerhalb des Bereichs!\n"
+    }},
+    {VitalSpo2, {
+        "Oxygen Saturation out of range!\n",
+        "Sauerstoffsättigung außerhalb des Bereichs!\n"
+    }}
 };
 
 typedef bool (*VitalCheckFunction)(float);
@@ -48,7 +65,7 @@ VitalCheckFunction vitalChecks[] = {
 };
 
 void showAlert(int CurrVital) {
-    printf("Message: %s", vitalInfoTable[CurrVital].alertMessage);
+    printf("Message: %s", vitalInfoTable[CurrVital].alertMessages[currentLanguage]);
     for (int i = 0; i < 6; i++) {
         cout << "\r* " << flush;
         sleep_for(seconds(1));
