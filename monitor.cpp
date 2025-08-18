@@ -3,6 +3,7 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
+#include <cstdio>
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
@@ -60,7 +61,6 @@ void showAlert(int CurrVital) {
 int vitalsOk(float temperature, float pulseRate, float spo2) {
     float values[] = {temperature, pulseRate, spo2};
     bool allOk = true;
-    
     for (int i = VitalTemperature; i < VitalCount; i++) {
         if (vitalChecks[i](values[i])) {
             showAlert(i);
