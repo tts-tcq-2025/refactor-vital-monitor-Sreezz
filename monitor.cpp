@@ -5,6 +5,8 @@
 #include <iostream>
 #include <cstdio>
 
+#include "./showAlert.h"
+
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
 Language currentLanguage = LANG_GERMAN;  // Default language
@@ -48,16 +50,6 @@ VitalCheckFunction vitalChecks[] = {
 
 const char* getAlertMessage(int CurrVital) {
     return vitalInfoTable[CurrVital].alertMessages[currentLanguage];
-}
-
-void showAlert(const char* message) {
-    printf("Message: %s", message);
-    for (int i = 0; i < 6; i++) {
-        cout << "\r* " << flush;
-        sleep_for(seconds(1));
-        cout << "\r *" << flush;
-        sleep_for(seconds(1));
-    }
 }
 
 int vitalsOk(float temperature, float pulseRate, float spo2) {
