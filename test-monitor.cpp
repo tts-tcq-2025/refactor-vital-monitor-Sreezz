@@ -14,3 +14,20 @@ TEST(Monitor, NotOkWhenAnyVitalIsOffRange) {
 }
 
 
+TEST(GetAlertMessageTest, ReturnsCorrectMessageInGerman) {
+    currentLanguage = LANG_GERMAN;
+
+    EXPECT_STREQ(getAlertMessage(VitalTemperature), "Temperatur ist kritisch!\n");
+    EXPECT_STREQ(getAlertMessage(VitalPulse), "Puls ist außerhalb des Bereichs!\n");
+    EXPECT_STREQ(getAlertMessage(VitalSpo2), "Sauerstoffsättigung außerhalb des Bereichs!\n");
+}
+
+TEST(GetAlertMessageTest, ReturnsCorrectMessageInEnglish) {
+    currentLanguage = LANG_ENGLISH;
+
+    EXPECT_STREQ(getAlertMessage(VitalTemperature), "Temperature is critical!\n");
+    EXPECT_STREQ(getAlertMessage(VitalPulse), "Pulse Rate is out of range!\n");
+    EXPECT_STREQ(getAlertMessage(VitalSpo2), "Oxygen Saturation out of range!\n");
+}
+
+
