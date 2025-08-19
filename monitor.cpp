@@ -7,27 +7,9 @@
 
 using std::cout, std::flush, std::this_thread::sleep_for, std::chrono::seconds;
 
-enum Vital {
-    VitalTemperature,
-    VitalPulse,
-    VitalSpo2,
-    VitalCount
-};
-
-enum Language {
-    LANG_ENGLISH,
-    LANG_GERMAN,
-    LANG_COUNT
-};
-
 Language currentLanguage = LANG_GERMAN;  // Default language
 
-typedef struct {
-    enum Vital status;
-    const char* alertMessages[LANG_COUNT];
-} VitalInfo;
-
-// Mapping table
+// Mapping table - Language order should be same as enum Language order
 const VitalInfo vitalInfoTable[VitalCount] = {
     {VitalTemperature, {
         "Temperature is critical!\n",
