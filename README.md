@@ -48,6 +48,6 @@ Shorten the Semantic distance
 - Aspect oriented to capture repeating aspects
 
 ## Extension : Support a language in addition to English
-  Added enum for supported languages
-  Added Global variable for to select language
-  Extended Mapping table to support extended languagge
+  - Added enum for supported languages
+  - Added Global variable for to select language
+  - Extended Mapping table to support extended languagge
