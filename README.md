@@ -46,3 +46,8 @@ Shorten the Semantic distance
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Aspect oriented to capture repeating aspects
+
+## Extension : Support a language in addition to English
+  Added enum for supported languages
+  Added Global variable for to select language
+  Extended Mapping table to support extended languagge
