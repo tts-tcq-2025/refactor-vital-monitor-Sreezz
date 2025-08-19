@@ -46,8 +46,12 @@ VitalCheckFunction vitalChecks[] = {
     isSpo2Low
 };
 
-void showAlert(int CurrVital) {
-    printf("Message: %s", vitalInfoTable[CurrVital].alertMessages[currentLanguage]);
+const char* getAlertMessage(int CurrVital) {
+    return vitalInfoTable[CurrVital].alertMessages[currentLanguage];
+}
+
+void showAlert(const char* message) {
+    printf("Message: %s", message);
     for (int i = 0; i < 6; i++) {
         cout << "\r* " << flush;
         sleep_for(seconds(1));
@@ -56,12 +60,16 @@ void showAlert(int CurrVital) {
     }
 }
 
-
 int vitalsOk(float temperature, float pulseRate, float spo2) {
     float values[] = {temperature, pulseRate, spo2};
     bool allOk = true;
+
     for (int i = VitalTemperature; i < VitalCount; i++) {
-        allOk &= !vitalChecks[i](values[i]) || (showAlert(i), false);
+        if (vitalChecks[i](values[i])) {
+            const char* message = getAlertMessage(i);
+            showAlert(message);
+            allOk = false;
+        }
     }
     return allOk ? 1 : 0;
 }
