@@ -18,8 +18,11 @@ typedef struct {
     const char* alertMessages[LANG_COUNT];
 } VitalInfo;
 
+extern Language currentLanguage;
+
 const char* getAlertMessage(int CurrVital);
 
 int vitalsOk(float temperature, float pulseRate, float spo2);
+
 
 
